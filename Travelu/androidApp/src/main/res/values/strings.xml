@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Travelu</string>
+    <string name="rating_exceptional">Exceptional</string>
+    <string name="rating_excellent">Excellent</string>
+    <string name="rating_very_good">Very Good</string>
+    <string name="rating_good">Good</string>
+    <string name="rating_average">Average</string>
+    <string name="rating_below_average">Below Average</string>
+</resources>

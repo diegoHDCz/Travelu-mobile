@@ -1,0 +1,8 @@
+<resources>
+    <string name="rating_exceptional">Excepcional</string>
+    <string name="rating_excellent">Excelente</string>
+    <string name="rating_very_good">Muito bom</string>
+    <string name="rating_good">Bom</string>
+    <string name="rating_average">Médio</string>
+    <string name="rating_below_average">Abaixo da média</string>
+</resources>
