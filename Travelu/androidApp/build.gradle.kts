@@ -21,6 +21,11 @@ dependencies {
     implementation(libs.compose.ui)
 
     implementation(libs.compose.uiToolingPreview)
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose.viewmodel)
+
     debugImplementation(libs.compose.uiTooling)
 }
 

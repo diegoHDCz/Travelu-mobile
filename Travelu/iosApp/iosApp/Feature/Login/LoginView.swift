@@ -9,13 +9,13 @@ final class LoginViewModelWrapper: ObservableObject {
     private var viewModel: LoginViewModel { holder.viewModel }
 
     init() {
-        let useCase = LoginUseCase(repository: LoginRepositoryImpl())
-        holder = LoginViewModelHolder(loginUseCase: useCase)
+        let holder = KoinHelperKt.getLoginViewModelHolder()
+        self.holder = holder
         // uiState.value chega como `Any?` porque o Kotlin/Native não preserva
         // o generic de StateFlow<T> (tipo de fora do nosso módulo) no export para ObjC.
-        self.state = viewModel.uiState.value as! LoginUiState
+        self.state = holder.viewModel.uiState.value as! LoginUiState
 
-        viewModel.observeState { [weak self] newState in
+        holder.viewModel.observeState { [weak self] newState in
             DispatchQueue.main.async {
                 self?.state = newState
             }

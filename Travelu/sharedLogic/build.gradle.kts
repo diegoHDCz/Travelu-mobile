@@ -34,14 +34,19 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
+            implementation(project.dependencies.platform(libs.koin.bom))
             api(libs.kotlinx.coroutines.core)
             api(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.koin.core)
         }
         androidMain.dependencies {
             implementation(libs.kotlinx.coroutines.android)
         }
         commonTest.dependencies {
+            implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.koin.test)
         }
     }
 }
