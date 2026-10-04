@@ -12,13 +12,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,12 +41,32 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import br.com.travelu.core.widget.TraveluCircleImageButton
 import br.com.travelu.core.widget.TraveluSpacer
+import br.com.travelu.feature.login.presentation.LoginViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    viewModel: LoginViewModel = koinViewModel(),
+    onLoginSuccess: () -> Unit = {},
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    LaunchedEffect(uiState.userName) {
+        if (uiState.userName != null) onLoginSuccess()
+    }
+
+    val userName = uiState.userName
+    if (userName != null) {
+        LoggedInContent(userName = userName, onLogoutClicked = viewModel::onLogoutClicked)
+        return
+    }
+
     Scaffold {
 
         var passwordVisibility by remember { mutableStateOf<Boolean>(false) }
@@ -84,7 +105,8 @@ fun LoginScreen() {
             TraveluSpacer(26.dp)
 
             OutlinedTextField(
-                "Email Address", onValueChange = {},
+                value = email,
+                onValueChange = { email = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -107,7 +129,8 @@ fun LoginScreen() {
             TraveluSpacer(16.dp)
 
             OutlinedTextField(
-                "Password", onValueChange = {},
+                value = password,
+                onValueChange = { password = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -140,6 +163,18 @@ fun LoginScreen() {
                     )
                 }
             )
+
+            if (uiState.errorMessage != null) {
+                Text(
+                    uiState.errorMessage.orEmpty(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 14.sp,
+                )
+            }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -156,7 +191,8 @@ fun LoginScreen() {
                 }
             }
             Button(
-                onClick = {},
+                onClick = { viewModel.onLoginClicked(email, password) },
+                enabled = !uiState.isLoading && email.isNotBlank() && password.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -164,7 +200,15 @@ fun LoginScreen() {
                 shape = RoundedCornerShape(12.dp)
 
             ) {
-                Text("Sign In", modifier = Modifier.padding(vertical = 8.dp))
+                if (uiState.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                } else {
+                    Text("Sign In", modifier = Modifier.padding(vertical = 8.dp))
+                }
             }
 
             Row(
@@ -181,6 +225,29 @@ fun LoginScreen() {
                 TextButton(onClick = {}) {
                     Text("Sign up", color = MaterialTheme.colorScheme.primary)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun LoggedInContent(userName: String, onLogoutClicked: () -> Unit) {
+    Scaffold {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                "Welcome, $userName!",
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center,
+            )
+            TraveluSpacer(16.dp)
+            Button(onClick = onLogoutClicked) {
+                Text("Log out", modifier = Modifier.padding(vertical = 8.dp))
             }
         }
     }
