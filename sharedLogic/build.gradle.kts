@@ -38,9 +38,17 @@ kotlin {
             api(libs.kotlinx.coroutines.core)
             api(libs.androidx.lifecycle.viewmodel)
             implementation(libs.koin.core)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.contentNegotiation)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.serialization.kotlinxJson)
         }
         androidMain.dependencies {
             implementation(libs.kotlinx.coroutines.android)
+            implementation(libs.ktor.client.okhttp)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         commonTest.dependencies {
             implementation(project.dependencies.platform(libs.koin.bom))

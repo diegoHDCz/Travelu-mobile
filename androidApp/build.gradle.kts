@@ -24,6 +24,7 @@ dependencies {
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
+    implementation(libs.material.icons.extended)
     implementation(libs.koin.compose.viewmodel)
 
     debugImplementation(libs.compose.uiTooling)

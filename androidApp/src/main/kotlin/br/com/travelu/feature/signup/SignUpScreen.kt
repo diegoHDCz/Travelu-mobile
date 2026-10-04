@@ -1,5 +1,4 @@
-package br.com.travelu.feature.login.ui
-
+package br.com.travelu.feature.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,12 +6,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -31,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -43,12 +39,11 @@ import androidx.compose.ui.unit.sp
 import br.com.travelu.core.widget.TraveluCircleImageButton
 import br.com.travelu.core.widget.TraveluSpacer
 
-
 @Composable
-fun LoginScreen() {
+fun SignUpScreen() {
     Scaffold {
-
-        var passwordVisibility by remember { mutableStateOf<Boolean>(false) }
+        var passwordVisibility by remember { mutableStateOf(false) }
+        var confirmPasswordVisibility by remember { mutableStateOf(false) }
 
         Column(
             modifier = Modifier
@@ -63,16 +58,15 @@ fun LoginScreen() {
             )
             TraveluSpacer(20.dp)
             Text(
-                "Sign in now",
+                "Create account",
                 Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
                 textAlign = TextAlign.Center,
                 fontSize = 32.sp,
-
-                )
+            )
             Text(
-                "Please sign in to continue our app",
+                "Please fill the details to continue",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -82,6 +76,29 @@ fun LoginScreen() {
             )
 
             TraveluSpacer(26.dp)
+
+            OutlinedTextField(
+                "Full Name", onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant.copy(0.2f)
+                    ),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.surfaceVariant.copy(0.2f),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.surfaceVariant.copy(0.2f)
+                ),
+                placeholder = {
+                    Text(
+                        "Full Name",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+                    )
+                }
+            )
+            TraveluSpacer(16.dp)
 
             OutlinedTextField(
                 "Email Address", onValueChange = {},
@@ -140,21 +157,45 @@ fun LoginScreen() {
                     )
                 }
             )
-            Row(
+            TraveluSpacer(16.dp)
+
+            OutlinedTextField(
+                "Confirm Password", onValueChange = {},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Spacer(modifier = Modifier.weight(1f))
-                TextButton(onClick = {}) {
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant.copy(0.2f)
+                    ),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.surfaceVariant.copy(0.2f),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.surfaceVariant.copy(0.2f)
+                ),
+                placeholder = {
                     Text(
-                        "Forgot Password?",
-                        color = MaterialTheme.colorScheme.primary
+                        "Confirm Password",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onBackground.copy(0.7f)
+                    )
+                },
+                visualTransformation = if (confirmPasswordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    Image(
+                        imageVector = if (!confirmPasswordVisibility) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                        contentDescription = "Confirm Password Icon",
+                        modifier = Modifier
+                            .size(48.dp)
+                            .padding(12.dp)
+                            .clickable {
+                                confirmPasswordVisibility = !confirmPasswordVisibility
+                            }
                     )
                 }
-            }
+            )
+
+            TraveluSpacer(16.dp)
+
             Button(
                 onClick = {},
                 modifier = Modifier
@@ -162,9 +203,8 @@ fun LoginScreen() {
                     .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(6.dp)),
                 shape = RoundedCornerShape(12.dp)
-
             ) {
-                Text("Sign In", modifier = Modifier.padding(vertical = 8.dp))
+                Text("Sign Up", modifier = Modifier.padding(vertical = 8.dp))
             }
 
             Row(
@@ -175,11 +215,11 @@ fun LoginScreen() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    "Don't have an acount?",
+                    "Already have an account?",
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
                 TextButton(onClick = {}) {
-                    Text("Sign up", color = MaterialTheme.colorScheme.primary)
+                    Text("Sign in", color = MaterialTheme.colorScheme.primary)
                 }
             }
         }
@@ -188,6 +228,6 @@ fun LoginScreen() {
 
 @Composable
 @Preview(showBackground = true)
-fun LoginScreenPreview() {
-    LoginScreen()
+fun SignUpScreenPreview() {
+    SignUpScreen()
 }
