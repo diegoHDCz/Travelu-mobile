@@ -42,11 +42,4 @@ class TravelViewModel(
                 .collect { travel -> _uiState.value = _uiState.value.copy(selectedTravel = travel) }
         }
     }
-
-
-    fun observeState(onChange: (TravelUiState) -> Unit) {
-        viewModelScope.launch {
-            uiState.collect { onChange(it) }
-        }
-    }
 }

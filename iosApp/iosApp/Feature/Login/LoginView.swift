@@ -5,20 +5,20 @@ import SharedLogic
 final class LoginViewModelWrapper: ObservableObject {
     @Published var state: LoginUiState
 
-    private let holder: LoginViewModelHolder
+    private let holder: ViewModelHolder<LoginViewModel>
     private var viewModel: LoginViewModel { holder.viewModel }
 
     init() {
         let holder = KoinHelperKt.getLoginViewModelHolder()
         self.holder = holder
-        // uiState.value chega como `Any?` porque o Kotlin/Native não preserva
-        // o generic de StateFlow<T> (tipo de fora do nosso módulo) no export para ObjC.
-        self.state = holder.viewModel.uiState.value as! LoginUiState
+        // Com SKIE, StateFlow<T> preserva o generic e .value já chega tipado.
+        self.state = holder.viewModel.uiState.value
+    }
 
-        holder.viewModel.observeState { [weak self] newState in
-            DispatchQueue.main.async {
-                self?.state = newState
-            }
+    @MainActor
+    func observe() async {
+        for await newState in viewModel.uiState {
+            state = newState
         }
     }
 
@@ -48,6 +48,9 @@ struct LoginView: View {
             }
         }
         .padding()
+        .task {
+            await wrapper.observe()
+        }
     }
 }
 
