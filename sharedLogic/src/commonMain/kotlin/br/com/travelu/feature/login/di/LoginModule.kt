@@ -6,6 +6,7 @@ import br.com.travelu.feature.login.domain.repository.LoginRepository
 import br.com.travelu.feature.login.domain.usecase.GetCurrentUserUseCase
 import br.com.travelu.feature.login.domain.usecase.LoginUseCase
 import br.com.travelu.feature.login.domain.usecase.LogoutUseCase
+import br.com.travelu.feature.login.domain.usecase.RestoreSessionUseCase
 import br.com.travelu.feature.login.presentation.LoginViewModel
 import org.koin.dsl.module
 
@@ -15,5 +16,6 @@ val loginModule = module {
     factory { LoginUseCase(get()) }
     factory { GetCurrentUserUseCase(get()) }
     factory { LogoutUseCase(get()) }
-    factory { LoginViewModel(get(), get(), get()) }
+    factory { RestoreSessionUseCase(get()) }
+    factory { LoginViewModel(get(), get(), get(), get()) }
 }

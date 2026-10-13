@@ -71,7 +71,10 @@ struct LoginView: View {
 
     var body: some View {
         Group {
-            if let userName = wrapper.state.user?.name {
+            if wrapper.state.isRestoringSession {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if let userName = wrapper.state.user?.name {
                 LoggedInContent(userName: userName, onLogoutClicked: wrapper.onLogoutClicked)
             } else {
                 loginForm

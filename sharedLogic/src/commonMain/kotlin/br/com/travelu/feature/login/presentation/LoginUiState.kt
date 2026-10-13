@@ -7,5 +7,7 @@ data class LoginUiState(
     val password: String = "",
     val user: User? = null,
     val isLoading: Boolean = false,
+    // Validando tokens salvos na abertura do app; a UI mostra um loading em vez do formulário.
+    val isRestoringSession: Boolean = false,
     val errorMessage: String? = null
 )
