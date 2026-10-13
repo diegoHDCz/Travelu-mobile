@@ -7,12 +7,12 @@ import br.com.travelu.feature.login.data.model.TokenPairDto
 import br.com.travelu.feature.login.data.model.UserDTO
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.auth.authProvider
+import io.ktor.client.plugins.auth.providers.BearerAuthProvider
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 
 // Fala diretamente com a API documentada em localhost:8080/docs. Nenhuma rota
@@ -38,8 +38,13 @@ class AuthRemoteDataSource(private val httpClient: HttpClient) {
         }
     }
 
-    suspend fun getCurrentUser(accessToken: String): UserDTO =
-        httpClient.get("api/v1/users/me") {
-            header(HttpHeaders.Authorization, "Bearer $accessToken")
-        }.body()
+    // O Authorization vem do plugin Auth (NetworkModule), que renova o token no 401.
+    suspend fun getCurrentUser(): UserDTO =
+        httpClient.get("api/v1/users/me").body()
+
+    // O plugin Auth guarda em cache o último par carregado; após login/logout
+    // ele precisa reler o AuthSessionManager.
+    fun invalidateCachedTokens() {
+        httpClient.authProvider<BearerAuthProvider>()?.clearToken()
+    }
 }

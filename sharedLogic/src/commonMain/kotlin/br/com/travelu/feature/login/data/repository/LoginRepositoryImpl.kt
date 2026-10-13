@@ -15,19 +15,27 @@ class LoginRepositoryImpl(
     private val session: AuthSessionManager,
 ) : LoginRepository {
 
+    override fun hasSession(): Boolean = session.isAuthenticated
+
     override suspend fun login(email: String, password: String): Result<User> = safeApiCall {
         val tokens = remoteDataSource.login(LoginRequestDto(login = email, password = password))
         session.saveTokens(tokens.accessToken, tokens.refreshToken)
-        remoteDataSource.getCurrentUser(tokens.accessToken).toDomain()
+        remoteDataSource.invalidateCachedTokens()
+        remoteDataSource.getCurrentUser().toDomain()
     }
 
     override suspend fun getCurrentUser(): Result<User> = safeApiCall {
-        val accessToken = checkNotNull(session.accessToken) { "Not authenticated" }
-        remoteDataSource.getCurrentUser(accessToken).toDomain()
+        check(session.isAuthenticated) { "Not authenticated" }
+        remoteDataSource.getCurrentUser().toDomain()
     }
 
     override suspend fun logout(): Result<Unit> = safeApiCall {
-        session.refreshToken?.let { remoteDataSource.logout(LogoutRequestDto(it)) }
-        session.clear()
+        try {
+            session.refreshToken?.let { remoteDataSource.logout(LogoutRequestDto(it)) }
+        } finally {
+            // Mesmo se a revogação no servidor falhar, o aparelho esquece a sessão.
+            session.clear()
+            remoteDataSource.invalidateCachedTokens()
+        }
     }
 }

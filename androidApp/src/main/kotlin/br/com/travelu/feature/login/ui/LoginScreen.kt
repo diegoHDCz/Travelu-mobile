@@ -4,6 +4,7 @@ package br.com.travelu.feature.login.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -69,6 +70,13 @@ fun LoginScreen(
 
     LaunchedEffect(uiState.user?.name) {
         if (uiState.user?.name != null) onLoginSuccess()
+    }
+
+    if (uiState.isRestoringSession) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
     }
 
     val userName = uiState.user?.name
