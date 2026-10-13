@@ -22,12 +22,22 @@ class LoginViewModel(
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-    fun onLoginClicked(email: String, password: String) {
+    fun onEmailChanged(email: String) {
+        _uiState.value = _uiState.value.copy(email = email)
+    }
+
+    fun onPasswordChanged(password: String) {
+        _uiState.value = _uiState.value.copy(password = password)
+    }
+
+    fun onLoginClicked() {
+        val email = _uiState.value.email
+        val password = _uiState.value.password
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
             when (val result = loginUseCase(email, password)) {
-                is Result.Success -> _uiState.value = LoginUiState(userName = result.data.name)
-                is Result.Error -> _uiState.value = LoginUiState(errorMessage = result.message)
+                is Result.Success -> _uiState.value = _uiState.value.copy(isLoading = false, user = result.data)
+                is Result.Error -> _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = result.message)
             }
         }
     }
@@ -41,8 +51,8 @@ class LoginViewModel(
     ) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-            when (val result = registerUseCase(name, password, email, phone, username)) {
-                is Result.Success -> _uiState.value = LoginUiState(userName = result.data.name)
+            when (val result = registerUseCase(name, password, email, phone)) {
+                is Result.Success -> _uiState.value = LoginUiState(user = result.data)
                 is Result.Error -> _uiState.value = LoginUiState(errorMessage = result.message)
             }
         }
@@ -52,7 +62,7 @@ class LoginViewModel(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
             when (val result = getCurrentUserUseCase()) {
-                is Result.Success -> _uiState.value = _uiState.value.copy(isLoading = false, userName = result.data.name)
+                is Result.Success -> _uiState.value = _uiState.value.copy(isLoading = false, user = result.data)
                 is Result.Error -> _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = result.message)
             }
         }

@@ -9,7 +9,6 @@ interface LoginRepository {
         password: String,
         email: String? = null,
         phone: String? = null,
-        username: String? = null,
     ): Result<User>
 
     suspend fun login(email: String, password: String): Result<User>

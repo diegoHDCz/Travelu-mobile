@@ -8,5 +8,4 @@ fun UserDTO.toDomain(): User = User(
     name = name,
     email = email,
     phone = phone,
-    username = username,
 )

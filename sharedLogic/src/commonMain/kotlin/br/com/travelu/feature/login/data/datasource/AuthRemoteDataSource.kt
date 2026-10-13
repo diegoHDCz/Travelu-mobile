@@ -1,6 +1,5 @@
 package br.com.travelu.feature.login.data.datasource
 
-import br.com.travelu.core.network.API_BASE_URL
 import br.com.travelu.feature.login.data.model.LoginRequestDto
 import br.com.travelu.feature.login.data.model.LogoutRequestDto
 import br.com.travelu.feature.login.data.model.RefreshRequestDto
@@ -22,32 +21,32 @@ import io.ktor.http.contentType
 class AuthRemoteDataSource(private val httpClient: HttpClient) {
 
     suspend fun register(request: RegisterRequestDto): UserDTO =
-        httpClient.post("${API_BASE_URL}/api/v1/auth/register") {
+        httpClient.post("api/v1/auth/register") {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
 
     suspend fun login(request: LoginRequestDto): TokenPairDto =
-        httpClient.post("${API_BASE_URL}/api/v1/auth/login") {
+        httpClient.post("api/v1/auth/login") {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
 
     suspend fun refresh(request: RefreshRequestDto): TokenPairDto =
-        httpClient.post("${API_BASE_URL}/api/v1/auth/refresh") {
+        httpClient.post("api/v1/auth/refresh") {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
 
     suspend fun logout(request: LogoutRequestDto) {
-        httpClient.post("${API_BASE_URL}/api/v1/auth/logout") {
+        httpClient.post("api/v1/auth/logout") {
             contentType(ContentType.Application.Json)
             setBody(request)
         }
     }
 
     suspend fun getCurrentUser(accessToken: String): UserDTO =
-        httpClient.get("${API_BASE_URL}/api/v1/users/me") {
+        httpClient.get("api/v1/users/me") {
             header(HttpHeaders.Authorization, "Bearer $accessToken")
         }.body()
 }

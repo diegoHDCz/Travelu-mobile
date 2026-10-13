@@ -12,6 +12,5 @@ class RegisterUseCase(
         password: String,
         email: String? = null,
         phone: String? = null,
-        username: String? = null,
-    ): Result<User> = repository.register(name, password, email, phone, username)
+    ): Result<User> = repository.register(name, password, email, phone)
 }

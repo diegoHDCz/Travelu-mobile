@@ -5,5 +5,4 @@ data class User(
     val name: String,
     val email: String? = null,
     val phone: String? = null,
-    val username: String? = null,
 )

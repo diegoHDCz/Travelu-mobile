@@ -23,7 +23,9 @@ final class LoginViewModelWrapper: ObservableObject {
     }
 
     func login() {
-        viewModel.onLoginClicked(email: "teste@travelu.com", password: "123456")
+        viewModel.onEmailChanged(email: "teste@travelu.com")
+        viewModel.onPasswordChanged(password: "123456")
+        viewModel.onLoginClicked()
     }
 
     deinit {
@@ -38,7 +40,7 @@ struct LoginView: View {
         VStack(spacing: 16) {
             if wrapper.state.isLoading {
                 ProgressView()
-            } else if let userName = wrapper.state.userName {
+            } else if let userName = wrapper.state.user?.name {
                 Text("Bem-vindo, \(userName)!")
             } else {
                 Text(wrapper.state.errorMessage ?? "Faça login")

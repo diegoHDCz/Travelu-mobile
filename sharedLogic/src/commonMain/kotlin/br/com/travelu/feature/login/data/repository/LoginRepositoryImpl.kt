@@ -21,10 +21,9 @@ class LoginRepositoryImpl(
         password: String,
         email: String?,
         phone: String?,
-        username: String?,
     ): Result<User> = safeApiCall {
         remoteDataSource.register(
-            RegisterRequestDto(name = name, password = password, email = email, phone = phone, username = username),
+            RegisterRequestDto(name = name, password = password, email = email, phone = phone),
         ).toDomain()
     }
 

@@ -22,3 +22,6 @@ node_modules/
 .env
 .env.local
 !.env.example
+
+# Gerado a partir do .env por scripts/generate-ios-env.sh
+iosApp/Configuration/Env.xcconfig

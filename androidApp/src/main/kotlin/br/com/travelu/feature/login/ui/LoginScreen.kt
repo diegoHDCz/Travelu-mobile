@@ -1,7 +1,6 @@
 package br.com.travelu.feature.login.ui
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +18,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -52,16 +52,17 @@ import org.koin.compose.viewmodel.koinViewModel
 fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel(),
     onLoginSuccess: () -> Unit = {},
+    onBackClick: () -> Unit = {},
+    onForgotPasswordClick: () -> Unit = {},
+    onSignUpClick: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
 
-    LaunchedEffect(uiState.userName) {
-        if (uiState.userName != null) onLoginSuccess()
+    LaunchedEffect(uiState.user?.name) {
+        if (uiState.user?.name != null) onLoginSuccess()
     }
 
-    val userName = uiState.userName
+    val userName = uiState.user?.name
     if (userName != null) {
         LoggedInContent(userName = userName, onLogoutClicked = viewModel::onLogoutClicked)
         return
@@ -80,7 +81,7 @@ fun LoginScreen(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back arrow",
                 modifier = Modifier,
-                onClick = {}
+                onClick = onBackClick
             )
             TraveluSpacer(20.dp)
             Text(
@@ -105,8 +106,8 @@ fun LoginScreen(
             TraveluSpacer(26.dp)
 
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = uiState.email,
+                onValueChange = viewModel::onEmailChanged,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -129,8 +130,8 @@ fun LoginScreen(
             TraveluSpacer(16.dp)
 
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = uiState.password,
+                onValueChange = viewModel::onPasswordChanged,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -151,7 +152,7 @@ fun LoginScreen(
                 },
                 visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    Image(
+                    Icon(
                         imageVector = if (!passwordVisibility) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                         contentDescription = "Password Icon",
                         modifier = Modifier
@@ -183,7 +184,7 @@ fun LoginScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Spacer(modifier = Modifier.weight(1f))
-                TextButton(onClick = {}) {
+                TextButton(onClick = onForgotPasswordClick) {
                     Text(
                         "Forgot Password?",
                         color = MaterialTheme.colorScheme.primary
@@ -191,8 +192,8 @@ fun LoginScreen(
                 }
             }
             Button(
-                onClick = { viewModel.onLoginClicked(email, password) },
-                enabled = !uiState.isLoading && email.isNotBlank() && password.isNotBlank(),
+                onClick = viewModel::onLoginClicked,
+                enabled = !uiState.isLoading && uiState.email.isNotBlank() && uiState.password.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -222,7 +223,7 @@ fun LoginScreen(
                     "Don't have an acount?",
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
-                TextButton(onClick = {}) {
+                TextButton(onClick = onSignUpClick) {
                     Text("Sign up", color = MaterialTheme.colorScheme.primary)
                 }
             }
