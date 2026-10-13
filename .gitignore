@@ -25,3 +25,4 @@ node_modules/
 
 # Gerado a partir do .env por scripts/generate-ios-env.sh
 iosApp/Configuration/Env.xcconfig
+.claude/worktrees/
