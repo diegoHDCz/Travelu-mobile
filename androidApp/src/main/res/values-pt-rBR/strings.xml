@@ -5,4 +5,6 @@
     <string name="rating_good">Bom</string>
     <string name="rating_average">Médio</string>
     <string name="rating_below_average">Abaixo da média</string>
+    <string name="error_invalid_email">Informe um e-mail válido</string>
+    <string name="error_passwords_do_not_match">As senhas não coincidem</string>
 </resources>

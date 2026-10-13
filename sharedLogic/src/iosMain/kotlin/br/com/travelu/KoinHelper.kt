@@ -3,6 +3,7 @@ package br.com.travelu
 import br.com.travelu.core.di.initKoin
 import br.com.travelu.core.presentation.ViewModelHolder
 import br.com.travelu.feature.login.presentation.LoginViewModel
+import br.com.travelu.feature.register.presentation.RegisterViewModel
 import br.com.travelu.feature.travel.presentation.TravelViewModel
 import org.koin.mp.KoinPlatform
 
@@ -16,5 +17,7 @@ fun doInitKoin() {
 }
 
 fun getLoginViewModelHolder(): ViewModelHolder<LoginViewModel> = KoinPlatform.getKoin().get()
+
+fun getRegisterViewModelHolder(): ViewModelHolder<RegisterViewModel> = KoinPlatform.getKoin().get()
 
 fun getTravelViewModelHolder(): ViewModelHolder<TravelViewModel> = KoinPlatform.getKoin().get()

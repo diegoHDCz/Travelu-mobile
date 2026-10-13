@@ -6,4 +6,6 @@
     <string name="rating_good">Good</string>
     <string name="rating_average">Average</string>
     <string name="rating_below_average">Below Average</string>
+    <string name="error_invalid_email">Enter a valid email address</string>
+    <string name="error_passwords_do_not_match">Passwords do not match</string>
 </resources>

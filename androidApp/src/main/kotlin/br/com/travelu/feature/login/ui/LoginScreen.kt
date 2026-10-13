@@ -55,8 +55,17 @@ fun LoginScreen(
     onBackClick: () -> Unit = {},
     onForgotPasswordClick: () -> Unit = {},
     onSignUpClick: () -> Unit = {},
+    registeredEmail: String? = null,
+    onRegisteredEmailConsumed: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(registeredEmail) {
+        if (registeredEmail != null) {
+            viewModel.onEmailChanged(registeredEmail)
+            onRegisteredEmailConsumed()
+        }
+    }
 
     LaunchedEffect(uiState.user?.name) {
         if (uiState.user?.name != null) onLoginSuccess()

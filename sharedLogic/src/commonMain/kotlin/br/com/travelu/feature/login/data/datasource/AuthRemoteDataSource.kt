@@ -3,7 +3,6 @@ package br.com.travelu.feature.login.data.datasource
 import br.com.travelu.feature.login.data.model.LoginRequestDto
 import br.com.travelu.feature.login.data.model.LogoutRequestDto
 import br.com.travelu.feature.login.data.model.RefreshRequestDto
-import br.com.travelu.feature.login.data.model.RegisterRequestDto
 import br.com.travelu.feature.login.data.model.TokenPairDto
 import br.com.travelu.feature.login.data.model.UserDTO
 import io.ktor.client.HttpClient
@@ -19,12 +18,6 @@ import io.ktor.http.contentType
 // Fala diretamente com a API documentada em localhost:8080/docs. Nenhuma rota
 // aqui trata erro — isso é responsabilidade de safeApiCall, no repositório.
 class AuthRemoteDataSource(private val httpClient: HttpClient) {
-
-    suspend fun register(request: RegisterRequestDto): UserDTO =
-        httpClient.post("api/v1/auth/register") {
-            contentType(ContentType.Application.Json)
-            setBody(request)
-        }.body()
 
     suspend fun login(request: LoginRequestDto): TokenPairDto =
         httpClient.post("api/v1/auth/login") {

@@ -6,7 +6,6 @@ import br.com.travelu.core.util.Result
 import br.com.travelu.feature.login.domain.usecase.GetCurrentUserUseCase
 import br.com.travelu.feature.login.domain.usecase.LoginUseCase
 import br.com.travelu.feature.login.domain.usecase.LogoutUseCase
-import br.com.travelu.feature.login.domain.usecase.RegisterUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +13,6 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
-    private val registerUseCase: RegisterUseCase,
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val logoutUseCase: LogoutUseCase,
 ) : ViewModel() {
@@ -38,22 +36,6 @@ class LoginViewModel(
             when (val result = loginUseCase(email, password)) {
                 is Result.Success -> _uiState.value = _uiState.value.copy(isLoading = false, user = result.data)
                 is Result.Error -> _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = result.message)
-            }
-        }
-    }
-
-    fun onRegisterClicked(
-        name: String,
-        password: String,
-        email: String? = null,
-        phone: String? = null,
-        username: String? = null,
-    ) {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-            when (val result = registerUseCase(name, password, email, phone)) {
-                is Result.Success -> _uiState.value = LoginUiState(user = result.data)
-                is Result.Error -> _uiState.value = LoginUiState(errorMessage = result.message)
             }
         }
     }

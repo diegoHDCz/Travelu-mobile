@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 // API_BASE_URL: env var do processo (CI/CD) → `.env` na raiz (dev local) →
@@ -42,7 +43,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.material.icons.extended)
     implementation(libs.koin.compose.viewmodel)
-
+    implementation(libs.androidx.navigation)
     debugImplementation(libs.compose.uiTooling)
 }
 
