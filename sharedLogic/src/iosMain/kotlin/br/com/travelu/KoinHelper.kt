@@ -16,8 +16,13 @@ fun doInitKoin() {
     initKoin()
 }
 
-fun getLoginViewModelHolder(): ViewModelHolder<LoginViewModel> = KoinPlatform.getKoin().get()
+// O holder é montado aqui e não registrado no Koin: o Koin resolve por classe
+// (sem o generic), então ViewModelHolder<A> e ViewModelHolder<B> colidiriam.
+fun getLoginViewModelHolder(): ViewModelHolder<LoginViewModel> =
+    ViewModelHolder(KoinPlatform.getKoin().get<LoginViewModel>())
 
-fun getRegisterViewModelHolder(): ViewModelHolder<RegisterViewModel> = KoinPlatform.getKoin().get()
+fun getRegisterViewModelHolder(): ViewModelHolder<RegisterViewModel> =
+    ViewModelHolder(KoinPlatform.getKoin().get<RegisterViewModel>())
 
-fun getTravelViewModelHolder(): ViewModelHolder<TravelViewModel> = KoinPlatform.getKoin().get()
+fun getTravelViewModelHolder(): ViewModelHolder<TravelViewModel> =
+    ViewModelHolder(KoinPlatform.getKoin().get<TravelViewModel>())

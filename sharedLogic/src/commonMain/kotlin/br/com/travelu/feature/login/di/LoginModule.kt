@@ -1,6 +1,5 @@
 package br.com.travelu.feature.login.di
 
-import br.com.travelu.core.presentation.ViewModelHolder
 import br.com.travelu.feature.login.data.datasource.AuthRemoteDataSource
 import br.com.travelu.feature.login.data.repository.LoginRepositoryImpl
 import br.com.travelu.feature.login.domain.repository.LoginRepository
@@ -17,5 +16,4 @@ val loginModule = module {
     factory { GetCurrentUserUseCase(get()) }
     factory { LogoutUseCase(get()) }
     factory { LoginViewModel(get(), get(), get()) }
-    factory { ViewModelHolder(LoginViewModel(get(), get(), get())) }
 }
